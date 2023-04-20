@@ -1,19 +1,20 @@
 # Smart Resume Analyser App
 
+**Smart Resume Analyzer Using NLP**
 
 This System help user to make their CV upto the criteria of ATS by analysing the CV
 We Are also try to implement the Web scrapping technique to fetch the latest jobs according to the CV
 
 **Steps Involved in the system**
 
+ 1. Get The Resume from the user
+ 2. Save the resume into the system 
+ 3. PDF Extracting 
+ 4. Resumer Parsing 
+ 5. Display the Statistics
 
-Get The Resume from the user 
- 1. Save the resume into the system 
- 2. PDF Extracting 
- 3. Resumer Parsing 
- 4. Display the Statistics
- 5. Name Email 
-    - Phone Number
+      - Name Email 
+     - Phone Number
      - Expertise of person (Beginner, Intermediate, Expert)
      - Define Skills
      - Recomended Skills
@@ -48,3 +49,4 @@ Get The Resume from the user
  **6. Code:**
   1- https://github.com/Spidy20/Smart_Resume_Analyser_App/commit/b81aade0784c0a3a0d9b2e6a1d814852bb50423f
   2- https://towardsdatascience.com/resume-screening-with-python-1dea360be49b
+

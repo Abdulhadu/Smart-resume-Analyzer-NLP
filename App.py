@@ -1,4 +1,6 @@
 import streamlit as st
+import nltk
+nltk.download('stopwords')
 import pandas as pd
 import base64,random
 import time,datetime
@@ -8,14 +10,34 @@ from pdfminer3.pdfpage import PDFPage
 from pdfminer3.pdfinterp import PDFResourceManager
 from pdfminer3.pdfinterp import PDFPageInterpreter
 from pdfminer3.converter import TextConverter
+# from pdfminer.pdfparser import PDFParser
+# from pdfminer.pdfdocument import PDFDocument
+# from pdfminer.pdfpage import PDFPage, PDFTextExtractionNotAllowed
+# from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+# from pdfminer.pdfdevice import PDFDevice
+# from pdfminer.converter import TextConverter
+# from pdfminer.layout import LAParams, LTTextBox, LTTextLine
+# from pdfminer.converter import PDFPageAggregator
+
+# from io import BytesIO
+# from pdfminer.high_level import extract_text_to_fp
+# from pdfminer.layout import LAParams
+
+# import io
+# from pdfminer.converter import TextConverter
+# from pdfminer.layout import LAParams
+# from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+# from pdfminer.pdfpage import PDFPage
 import io,random
 from streamlit_tags import st_tags
 from PIL import Image
 import pymysql
 from Courses import ds_course,web_course,android_course,ios_course,uiux_course,resume_videos,interview_videos
 import pafy
+import os
+os.environ["PAFY_BACKEND"] = "internal"
 import plotly.express as px
-
+import spacy
 def fetch_yt_video(link):
     video = pafy.new(link)
     return video.title
@@ -30,6 +52,8 @@ def get_table_download_link(df,filename,text):
     # href = f'<a href="data:file/csv;base64,{b64}">Download Report</a>'
     href = f'<a href="data:file/csv;base64,{b64}" download="{filename}">{text}</a>'
     return href
+
+
 
 def pdf_reader(file):
     resource_manager = PDFResourceManager()
@@ -48,6 +72,64 @@ def pdf_reader(file):
     converter.close()
     fake_file_handle.close()
     return text
+
+
+
+# def pdf_reader(file):
+#     resource_manager = PDFResourceManager()
+#     fake_file_handle = io.StringIO()
+#     converter = TextConverter(resource_manager, fake_file_handle, laparams=LAParams())
+#     page_interpreter = PDFPageInterpreter(resource_manager, converter)
+#     with open(file, 'rb') as fh:
+#         for page in PDFPage.get_pages(fh,
+#                                       caching=True,
+#                                       check_extractable=True):
+#             page_interpreter.process_page(page)
+#             print(page)
+#         text = fake_file_handle.getvalue()
+
+#     # close open handles
+#     converter.close()
+#     fake_file_handle.close()
+#     return text
+
+
+
+
+# The Original Code 
+# resource_manager = PDFResourceManager()
+# with open(file, 'rb') as fh:
+#     with BytesIO() as output_string:
+#         laparams = LAParams()
+#         converter = TextConverter(resource_manager, output_string, laparams=laparams)
+#         extract_text_to_fp(fh, output_string, laparams=laparams, codec=None)
+#         text = output_string.getvalue().decode()
+
+# print(text)
+
+
+# def extract_text(file):
+#     resource_manager = PDFResourceManager()
+#     fake_file_handle = io.StringIO()
+#     laparams = LAParams()
+
+#     converter = TextConverter(resource_manager, fake_file_handle, laparams=laparams)
+
+#     page_interpreter = PDFPageInterpreter(resource_manager, converter)
+
+#     with open(file, 'rb') as fh:
+#         for page in PDFPage.get_pages(fh,
+#                                       caching=True,
+#                                       check_extractable=True):
+#             page_interpreter.process_page(page)
+#             print(page)
+#         text = fake_file_handle.getvalue()
+
+#     # close open handles
+#     converter.close()
+#     fake_file_handle.close()
+
+#     return text
 
 def show_pdf(file_path):
     with open(file_path, "rb") as f:
@@ -166,7 +248,7 @@ def run():
                                'javascript', 'angular js', 'c#', 'flask']
                 android_keyword = ['android','android development','flutter','kotlin','xml','kivy']
                 ios_keyword = ['ios','ios development','swift','cocoa','cocoa touch','xcode']
-                uiux_keyword = ['ux','adobe xd','figma','zeplin','balsamiq','ui','prototyping','wireframes','storyframes','adobe photoshop','photoshop','editing','adobe illustrator','illustrator','adobe after effects','after effects','adobe premier pro','premier pro','adobe indesign','indesign','wireframe','solid','grasp','user research','user experience']
+                uiux_keyword = ['ux','                adobexd','figma','zeplin','balsamiq','ui','prototyping','wireframes','storyframes','adobe photoshop','photoshop','editing','adobe illustrator','illustrator','adobe after effects','after effects','adobe premier pro','premier pro','adobe indesign','indesign','wireframe','solid','grasp','user research','user experience']
 
                 recommended_skills = []
                 reco_field = ''

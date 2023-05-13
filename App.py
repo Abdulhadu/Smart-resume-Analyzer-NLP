@@ -10,6 +10,14 @@ from pdfminer3.pdfpage import PDFPage
 from pdfminer3.pdfinterp import PDFResourceManager
 from pdfminer3.pdfinterp import PDFPageInterpreter
 from pdfminer3.converter import TextConverter
+import numpy as np
+import pandas as pd
+import re
+from ftfy import fix_text
+from nltk.corpus import stopwords
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.neighbors import NearestNeighbors
 # from pdfminer.pdfparser import PDFParser
 # from pdfminer.pdfdocument import PDFDocument
 # from pdfminer.pdfpage import PDFPage, PDFTextExtractionNotAllowed
@@ -165,7 +173,7 @@ def insert_data(name,email,res_score,timestamp,no_of_pages,reco_field,cand_level
 
 st.set_page_config(
    page_title="Smart Resume Analyzer",
-   page_icon='./Logo/SRA_Logo.ico',
+   page_icon='./Logo/banner.jpg',
 )
 def run():
     st.title("Smart Resume Analyser")
@@ -174,8 +182,8 @@ def run():
     choice = st.sidebar.selectbox("Choose among the given options:", activities)
     # link = '[©Developed by Spidy20](http://github.com/spidy20)'
     # st.sidebar.markdown(link, unsafe_allow_html=True)
-    img = Image.open('./Logo/SRA_Logo.jpg')
-    img = img.resize((250,250))
+    img = Image.open('./Logo/banner.jpg')
+    img = img.resize((700,350))
     st.image(img)
 
     # Create the DB
@@ -380,23 +388,87 @@ def run():
                               str(recommended_skills), str(rec_course))
 
 
-                ## Resume writing video
-                st.header("**Bonus Video for Resume Writing Tips💡**")
-                resume_vid = random.choice(resume_videos)
-                res_vid_title = fetch_yt_video(resume_vid)
-                st.subheader("✅ **"+res_vid_title+"**")
-                st.video(resume_vid)
+                ## Latest Jobs for the user
+                stopw  = set(stopwords.words('english'))
 
-                ## Interview Preparation Video
-                st.header("**Bonus Video for Interview👨‍💼 Tips💡**")
-                interview_vid = random.choice(interview_videos)
-                int_vid_title = fetch_yt_video(interview_vid)
-                st.subheader("✅ **" + int_vid_title + "**")
-                st.video(interview_vid)
-
-                connection.commit()
-            else:
-                st.error('Something went wrong..')
+                df =pd.read_csv('jobs.csv') 
+                df['test']=df['Job_Description'].apply(lambda x: ' '.join([word for word in str(x).split() if len(word)>2 and word not in (stopw)]))
+                st.header("**Recomended latest JOBS to apply for user 💡**")
+                fetch_resume=resume_data['skills']
+                print(type(fetch_resume))
+    
+                skills=[]
+                skills.append(' '.join(word for word in fetch_resume))
+                org_name_clean = skills
+        
+            def ngrams(string, n=3):
+                string = fix_text(string) # fix text
+                string = string.encode("ascii", errors="ignore").decode() #remove non ascii chars
+                string = string.lower()
+                chars_to_remove = [")","(",".","|","[","]","{","}","'"]
+                rx = '[' + re.escape(''.join(chars_to_remove)) + ']'
+                string = re.sub(rx, '', string)
+                string = string.replace('&', 'and')
+                string = string.replace(',', ' ')
+                string = string.replace('-', ' ')
+                string = string.title() # normalise case - capital at start of each word
+                string = re.sub(' +',' ',string).strip() # get rid of multiple spaces and replace with a single
+                string = ' '+ string +' ' # pad names for ngrams...
+                string = re.sub(r'[,-./]|\sBD',r'', string)
+                ngrams = zip(*[string[i:] for i in range(n)])
+                return [''.join(ngram) for ngram in ngrams]
+            vectorizer = TfidfVectorizer(min_df=1, analyzer=ngrams, 
+lowercase=False)
+            tfidf = vectorizer.fit_transform(org_name_clean)
+            print('Vecorizing completed...')
+        
+        
+            def getNearestN(query):
+              queryTFIDF_ = vectorizer.transform(query)
+              distances, indices = nbrs.kneighbors(queryTFIDF_)
+              return distances, indices
+            nbrs = NearestNeighbors(n_neighbors=1, n_jobs=-1).fit(tfidf)
+            unique_org = (df['test'].values)
+            distances, indices = getNearestN(unique_org)
+            unique_org = list(unique_org)
+            matches = []
+            for i,j in enumerate(indices):
+                dist=round(distances[i][0],2)
+                temp = [dist]
+                matches.append(temp)
+            matches = pd.DataFrame(matches, columns=['Match confidence'])
+            df['match']=matches['Match confidence']
+            df1=df.sort_values('match')
+            df2=df1[['Position', 'Company','Location']].head(10).reset_index()
+            st.table(df2)
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
     else:
         ## Admin Side
         st.success('Welcome to Admin Side')

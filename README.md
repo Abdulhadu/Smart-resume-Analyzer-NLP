@@ -1,55 +1,52 @@
 # Smart Resume Analyser App
 
-[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)                 
-[![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)   
+**Smart Resume Analyzer Using NLP**
 
-## [Watch Tutorial for this project](https://youtu.be/hqu5EYMLCUw)
-<img src="https://github.com/Spidy20/Smart_Resume_Analyser_App/blob/master/yt_thumb.jpg">
+This System help user to make their CV upto the criteria of ATS by analysing the CV
+We Are also try to implement the Web scrapping technique to fetch the latest jobs according to the CV
 
-## [Get the project Report, PPT, and Diagrams](https://kushalbhavsar1820.stores.instamojo.com/product/864991/smart-resume-analyzer-ppt-report-and-diagram-c091f/)
-## Source
-- Extracting user's information from the Resume, I used [PyResparser](https://omkarpathak.in/pyresparser/)
-- Extracting Resume PDF into Text, I used [PDFMiner](https://pypi.org/project/pdfminer/).
+**Steps Involved in the system**
 
-## Features
-- User's & Admin Section
-- Resume Score
-- Career Recommendations
-- Resume writing Tips suggestions
-- Courses Recommendations
-- Skills Recommendations
-- Youtube video recommendations
+ 1. Get The Resume from the user
+ 2. Save the resume into the system 
+ 3. PDF Extracting 
+ 4. Resumer Parsing 
+ 5. Display the Statistics
 
-## Usage
-- Clone my repository.
-- Open CMD in working directory.
-- Run following command.
-  ```
-  pip install -r requirements.txt
-  ```
-- `App.py` is the main Python file of Streamlit Web-Application. 
-- `Courses.py` is the Python file that contains courses and youtube video links.
-- Download XAMP or any other control panel, and turn on the Apache & SQL service.
-- To run app, write following command in CMD. or use any IDE.
-  ```
-  streamlit run App.py
-  ```
-- `Uploaded_Resumes` folder is contaning the user's uploaded resumes.
-- `Classifier.py` is the main file which is containing a KNN Algorithm.
-- For more explanation of this project see the tutorial on Machine Learning Hub YouTube channel.
-- Admin side credentials is `machine_learning_hub` and password is `mlhub123`. 
+      - Name Email 
+     - Phone Number
+     - Expertise of person (Beginner, Intermediate, Expert)
+     - Define Skills
+     - Recomended Skills
+     - Issues
+     - Resume Score
+     - Courses
+     - Recomended Changes in Resume 
+     - latest jobs according to CV (optional)
 
-## Screenshots
+ 
 
-## User side
-<img src="https://github.com/Spidy20/Smart_Resume_Analyser_App/blob/master/sc1.png">
+**. -Python Libraries:**
+                     
+                               Streamlit (For Creatinf the UI of web application of python)
+                               pandas  (Python data analysis library)
+                               pyresparser (for fetching data from image)
+                               pdfminer (for extracting data from PDF)
+                               pil (for images)
+                               pymysql (Database)
+                               pafy (a Python library to download YouTube content and retrieve metadata)
+                               plotly (for creating visualize charts and dasboard for admins)
 
-## Admin Side
-<img src="https://github.com/Spidy20/Smart_Resume_Analyser_App/blob/master/sc2.png">
+ **- Overall Algorithm**
+ - 
+ 1. NLP Algorithm (Technioques)
 
+ ****Dataset***
+ 3. By keggle  https://www.kaggle.com/datasets/gauravduttakiit/resume-dataset
+ 4. For Online Dataset Use  https://resumes.indeed.com/
+ 5. Use Scrapping to fetch the resume
 
-## Just follow☝️ me and Star⭐ my repository 
+ **6. Code:**
+  1- https://github.com/Spidy20/Smart_Resume_Analyser_App/commit/b81aade0784c0a3a0d9b2e6a1d814852bb50423f
+  2- https://towardsdatascience.com/resume-screening-with-python-1dea360be49b
 
-# [Buy me a Coffee☕](https://www.buymeacoffee.com/spidy20)
-## [Donate me on PayPal(It will inspire me to do more projects)](https://www.paypal.me/spidy1820)
-# Smart-resume-Analyzer-NLP
